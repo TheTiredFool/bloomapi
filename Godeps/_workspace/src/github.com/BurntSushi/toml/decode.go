@@ -1,23 +1,10 @@
 package toml
+	
 
-import (
-	"fmt"
-	"io"
-	"io/ioutil"
-	"math"
-	"reflect"
-	"strings"
-	"time"
-)
 
-var e = fmt.Errorf
 
 // Unmarshaler is the interface implemented by objects that can unmarshal a
-// TOML description of themselves.
-type Unmarshaler interface {
-	UnmarshalTOML(interface{}) error
-}
-
+// TOML description of themselves
 // Unmarshal decodes the contents of `p` in TOML format into a pointer `v`.
 func Unmarshal(p []byte, v interface{}) error {
 	_, err := Decode(string(p), v)
@@ -41,13 +28,8 @@ type Primitive struct {
 	context   Key
 }
 
-// DEPRECATED!
-//
 // Use MetaData.PrimitiveDecode instead.
-func PrimitiveDecode(primValue Primitive, v interface{}) error {
-	md := MetaData{decoded: make(map[string]bool)}
-	return md.unify(primValue.undecoded, rvalue(v))
-}
+func PrimitiveDecode(primValue Primitive, v
 
 // PrimitiveDecode is just like the other `Decode*` functions, except it
 // decodes a TOML value that has already been parsed. Valid primitive values
@@ -102,27 +84,11 @@ func (md *MetaData) PrimitiveDecode(primValue Primitive, v interface{}) error {
 //
 // This decoder will not handle cyclic types. If a cyclic type is passed,
 // `Decode` will not terminate.
-func Decode(data string, v interface{}) (MetaData, error) {
-	p, err := parse(data)
-	if err != nil {
-		return MetaData{}, err
-	}
-	md := MetaData{
-		p.mapping, p.types, p.ordered,
-		make(map[string]bool, len(p.ordered)), nil,
-	}
-	return md, md.unify(p.mapping, rvalue(v))
-}
-
 // DecodeFile is just like Decode, except it will automatically read the
 // contents of the file at `fpath` and decode it for you.
 func DecodeFile(fpath string, v interface{}) (MetaData, error) {
 	bs, err := ioutil.ReadFile(fpath)
-	if err != nil {
-		return MetaData{}, err
-	}
-	return Decode(string(bs), v)
-}
+	if err != n
 
 // DecodeReader is just like Decode, except it will consume all bytes
 // from the reader and decode it for you.
